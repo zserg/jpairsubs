@@ -1,12 +1,11 @@
 package com.zserg.jpairsubs.controller;
 
-import com.zserg.jpairsubs.model.PairSubs;
+import com.zserg.jpairsubs.model.Movie;
+import com.zserg.jpairsubs.model.PairSub;
 import com.zserg.jpairsubs.service.PairSubsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,13 +16,24 @@ public class SubsController {
     @Autowired
     PairSubsService pairSubsService;
 
-    @GetMapping("subs")
-    public List<PairSubs> getPairSubsList(){
-        return pairSubsService.getPairSubsList();
+    @GetMapping("movies")
+    public List<Movie> getMoviesList(){
+        return pairSubsService.getMoviesList();
     }
 
-    @GetMapping("subs/{id}")
-    public List<String[]> getPairSubs(@PathVariable("id") long id) {
-        return pairSubsService.getPairSubs(id);
+    @GetMapping("pairsubs")
+    public PairSub getPairSubs(@RequestParam("movie") long movieId,
+                                     @RequestParam("lang") String[] languages){
+        try {
+            return pairSubsService.getPairSubs(movieId, languages);
+        }catch (IllegalArgumentException e){
+            throw new PairSubsNotFoundException();
+        }
     }
+
+    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="No such pairsubs")  // 404
+    public class PairSubsNotFoundException extends RuntimeException {
+    }
+
+
 }

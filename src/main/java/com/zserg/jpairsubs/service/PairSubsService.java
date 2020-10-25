@@ -1,11 +1,14 @@
 package com.zserg.jpairsubs.service;
 
-import com.zserg.jpairsubs.model.PairSubs;
+import com.zserg.jpairsubs.model.Movie;
+import com.zserg.jpairsubs.model.PairSub;
 
 import java.util.List;
 
 public interface PairSubsService {
-    List<PairSubs> getPairSubsList();
+    List<PairSub> getPairSubsList();
 
-    List<String[]> getPairSubs(long id);
+    PairSub getPairSubs(long id, String[] languages);
+
+    List<Movie> getMoviesList();
 }

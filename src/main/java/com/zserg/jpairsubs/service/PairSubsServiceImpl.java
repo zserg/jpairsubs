@@ -1,7 +1,7 @@
 package com.zserg.jpairsubs.service;
 
-import com.zserg.jpairsubs.model.PairSubs;
-import com.zserg.jpairsubs.model.SubItem;
+import com.zserg.jpairsubs.model.Movie;
+import com.zserg.jpairsubs.model.PairSub;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,12 +9,17 @@ import java.util.List;
 @Service
 public class PairSubsServiceImpl implements PairSubsService {
     @Override
-    public List<PairSubs> getPairSubsList() {
+    public List<PairSub> getPairSubsList() {
         return null;
     }
 
     @Override
-    public List<String[]> getPairSubs(long id) {
+    public PairSub getPairSubs(long id, String[] languages) {
+        return null;
+    }
+
+    @Override
+    public List<Movie> getMoviesList() {
         return null;
     }
 }
