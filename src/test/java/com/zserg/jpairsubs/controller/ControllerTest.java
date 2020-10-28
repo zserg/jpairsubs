@@ -67,7 +67,7 @@ public class ControllerTest {
 
         when(pairSubsService.getPairSubs(1L, new String[]{"ru", "en"})).thenReturn(pairSubs);
 
-        this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,it"))
+        this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,en"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.movie.title", is("Nice movie")))
                 .andExpect(jsonPath("$.movie.year", is(1997)))
@@ -84,34 +84,6 @@ public class ControllerTest {
                 .andExpect(status().isNotFound());
 
     }
-
-
-//    @Test
-//    void getSubs() throws Exception {
-//        PairSubs pairSubs = new PairSubs();
-//        pairSubs.setTitle("Nice movie");
-//        pairSubs.setYear(2020);
-//        pairSubs.setLang(Arrays.asList("ru", "en"));
-//        when(pairSubsService.getPairSubsList()).thenReturn(List.of(pairSubs));
-//        List<String[]> list = new ArrayList<>();
-//        list.add(new String[]{"Привет", "Hello"});
-//        list.add(new String[]{"1", "2"});
-//        when(pairSubsService.getPairSubs(1L)).thenReturn(list);
-//
-//        this.mvc.perform(get("/api/v1/subs/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.title", is("Nice movie")))
-//                .andExpect(jsonPath("$.pairsubs.length()", is(2)))
-//                .andExpect(jsonPath("$.pairsubs.[0].subs.lang", is("ru")))
-//                .andExpect(jsonPath("$.pairsubs.[1].subs.lang", is("en")))
-//                .andExpect(jsonPath("$.pairsubs.[0].subs.items.length()", is(3)))
-//                .andExpect(jsonPath("$.pairsubs.[0].subs.items.[0]", is("Привет")))
-//                .andExpect(jsonPath("$.pairsubs.[0].subs.items.[1]", is("Как дела?")))
-//
-//    }
-//
-//
-
 
 }
 

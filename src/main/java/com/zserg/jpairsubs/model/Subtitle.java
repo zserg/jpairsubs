@@ -1,10 +1,14 @@
 package com.zserg.jpairsubs.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalTime;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class Subtitle {
     private int number;
     private int start;

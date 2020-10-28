@@ -31,7 +31,7 @@ public class SubsController {
         }
     }
 
-    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="No such pairsubs")  // 404
+    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="pairsubs not found")  // 404
     public class PairSubsNotFoundException extends RuntimeException {
     }
 
