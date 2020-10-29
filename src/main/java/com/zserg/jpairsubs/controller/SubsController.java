@@ -1,6 +1,7 @@
 package com.zserg.jpairsubs.controller;
 
 import com.zserg.jpairsubs.model.Movie;
+import com.zserg.jpairsubs.model.MovieExt;
 import com.zserg.jpairsubs.model.PairSub;
 import com.zserg.jpairsubs.service.PairSubsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1")
@@ -17,7 +19,7 @@ public class SubsController {
     PairSubsService pairSubsService;
 
     @GetMapping("movies")
-    public List<Movie> getMoviesList(){
+    public List<MovieExt> getMoviesList(){
         return pairSubsService.getMoviesList();
     }
 
@@ -28,10 +30,11 @@ public class SubsController {
             throw new BadRequestException();
         }
 
-        try {
-            return pairSubsService.getPairSubs(movieId, languages[0], languages[1]);
-        }catch (IllegalArgumentException e){
+        Optional<PairSub> pairSubs = pairSubsService.getPairSubs(movieId, languages[0], languages[1]);
+        if(!pairSubs.isPresent()){
             throw new PairSubsNotFoundException();
+        }else{
+           return pairSubs.get();
         }
     }
 

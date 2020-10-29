@@ -1,9 +1,7 @@
 package com.zserg.jpairsubs.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.zserg.jpairsubs.data.SubConverter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,5 +21,7 @@ public class Sub {
     private Movie movie;
 
     private String language;
+
+    @Convert(converter = SubConverter.class)
     private List<Subtitle> subs;
 }

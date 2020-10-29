@@ -3,25 +3,25 @@ package com.zserg.jpairsubs.model;
 import com.zserg.jpairsubs.data.SubConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
 public class PairSub {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="movie_id")
     private Movie movie;
 
-    @Convert(converter = SubConverter.class)
     private Sub subA;
-
-    @Convert(converter = SubConverter.class)
     private Sub subB;
+
+    public PairSub(Movie movie, Sub subA, Sub subB) {
+
+        this.movie = movie;
+        this.subA = subA;
+        this.subB = subB;
+    }
 }

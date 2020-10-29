@@ -1,9 +1,6 @@
 package com.zserg.jpairsubs.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,7 +20,7 @@ public class Movie {
     private int year;
 
     @OneToMany(mappedBy = "movie")
-    private List<PairSub> pairSubList;
+    private List<Sub> subList;
 
     public Movie(String title, String imdb, int year) {
         this.title = title;
