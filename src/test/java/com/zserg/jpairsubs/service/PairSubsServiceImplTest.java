@@ -30,8 +30,8 @@ class PairSubsServiceImplTest {
 
     @Test
     void getMoviesList() {
-        movieRepository.save(new Movie("Movie #1", "IMDB001", 1990, new String[]{"ru", "en"}));
-        movieRepository.save(new Movie("Movie #2", "IMDB002", 2000, new String[]{"ru", "en"}));
+        movieRepository.save(new Movie("Movie #1", "IMDB001", 1990));
+        movieRepository.save(new Movie("Movie #2", "IMDB002", 2000));
 
         List<Movie> movies = pairSubsService.getMoviesList();
         assertEquals(2, movies.size());
@@ -40,7 +40,7 @@ class PairSubsServiceImplTest {
     @Test
     void getPairSubTest() {
 
-        Movie movie = new Movie("Nice movie", "IMDB001", 1997, new String[]{"ru", "en", "fr"});
+        Movie movie = new Movie("Nice movie", "IMDB001", 1997);
         Subtitle subtitle1 = new Subtitle(1, 10, 15, "текст1");
         Subtitle subtitle2 = new Subtitle(2, 16, 18, "текст2");
         Sub sub1 = new Sub();
@@ -57,9 +57,10 @@ class PairSubsServiceImplTest {
         pairSubs.setSubA(sub1);
         pairSubs.setSubB(sub2);
 
+        Movie movieSaved = movieRepository.save(movie);
         PairSub saved = pairSubRepository.save(pairSubs);
 
-        PairSub result = pairSubRepository.findById(saved.getId()).get();
+        PairSub result = pairSubsService.getPairSubs(movieSaved.getId(), "ru", "en");
 
         assertEquals("Nice movie", result.getMovie().getTitle());
 

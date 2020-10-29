@@ -8,7 +8,7 @@ import java.util.List;
 public interface PairSubsService {
     List<PairSub> getPairSubsList();
 
-    PairSub getPairSubs(long id, String[] languages);
+    PairSub getPairSubs(Long movieId, String langA, String langB);
 
     List<Movie> getMoviesList();
 }

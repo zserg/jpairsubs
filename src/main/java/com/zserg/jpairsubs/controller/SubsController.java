@@ -24,8 +24,12 @@ public class SubsController {
     @GetMapping("pairsubs")
     public PairSub getPairSubs(@RequestParam("movie") long movieId,
                                      @RequestParam("lang") String[] languages){
+        if(languages.length != 2){
+            throw new BadRequestException();
+        }
+
         try {
-            return pairSubsService.getPairSubs(movieId, languages);
+            return pairSubsService.getPairSubs(movieId, languages[0], languages[1]);
         }catch (IllegalArgumentException e){
             throw new PairSubsNotFoundException();
         }
@@ -33,6 +37,10 @@ public class SubsController {
 
     @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="pairsubs not found")  // 404
     public class PairSubsNotFoundException extends RuntimeException {
+    }
+
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST, reason="invalid request")  // 404
+    public class BadRequestException extends RuntimeException {
     }
 
 

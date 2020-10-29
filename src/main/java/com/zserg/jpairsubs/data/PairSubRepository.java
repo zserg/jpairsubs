@@ -10,4 +10,7 @@ public interface PairSubRepository extends CrudRepository<PairSub, Long> {
 
     @Override
     List<PairSub> findAll();
+
+    List<PairSub> findByMovieId(Long movieId);
+
 }

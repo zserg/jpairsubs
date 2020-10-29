@@ -32,8 +32,8 @@ public class ControllerTest {
 
     @Test
     void getMoviesList() throws Exception {
-        Movie movie1 = new Movie("Nice movie", "IMDB001", 1997, new String[]{"ru", "en", "fr"});
-        Movie movie2 = new Movie("Nice movie 2", "IMDB002", 1997, new String[]{"ru", "en"});
+        Movie movie1 = new Movie("Nice movie", "IMDB001", 1997);
+        Movie movie2 = new Movie("Nice movie 2", "IMDB002", 1997);
         when(pairSubsService.getMoviesList()).thenReturn(List.of(movie1, movie2));
 
         this.mvc.perform(get("/api/v1/movies"))
@@ -48,7 +48,7 @@ public class ControllerTest {
 
     @Test
     void getPairSubsTest() throws Exception {
-        Movie movie = new Movie("Nice movie", "IMDB001", 1997, new String[]{"ru", "en", "fr"});
+        Movie movie = new Movie("Nice movie", "IMDB001", 1997);
         Subtitle subtitle1 = new Subtitle(1, 10, 15, "текст1");
         Subtitle subtitle2 = new Subtitle(2, 16, 18, "текст2");
         Sub sub1 = new Sub();
@@ -65,7 +65,7 @@ public class ControllerTest {
         pairSubs.setSubA(sub1);
         pairSubs.setSubB(sub2);
 
-        when(pairSubsService.getPairSubs(1L, new String[]{"ru", "en"})).thenReturn(pairSubs);
+        when(pairSubsService.getPairSubs(1L, "ru", "en")).thenReturn(pairSubs);
 
         this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,en"))
                 .andExpect(status().isOk())
@@ -78,7 +78,7 @@ public class ControllerTest {
     @Test
     void pairSubsNotFoundTest() throws Exception {
 
-        when(pairSubsService.getPairSubs(1L, new String[]{"ru", "it"})).thenThrow(new IllegalArgumentException("not found"));
+        when(pairSubsService.getPairSubs(1L, "ru", "it")).thenThrow(new IllegalArgumentException("not found"));
 
         this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,it"))
                 .andExpect(status().isNotFound());

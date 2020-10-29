@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,12 +21,13 @@ public class Movie {
     private String title;
     private String imdb;
     private int year;
-    private String[] lang;
 
-    public Movie(String title, String imdb, int year, String[] lang) {
+    @OneToMany(mappedBy = "movie")
+    private List<PairSub> pairSubList;
+
+    public Movie(String title, String imdb, int year) {
         this.title = title;
         this.imdb = imdb;
         this.year = year;
-        this.lang = lang;
     }
 }
