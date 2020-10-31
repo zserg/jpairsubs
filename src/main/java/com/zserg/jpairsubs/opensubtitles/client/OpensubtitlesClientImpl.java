@@ -8,13 +8,22 @@ import com.zserg.jpairsubs.opensubtitles.model.SearchSubtitlesResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Slf4j
+@Service
 public class OpensubtitlesClientImpl implements OpensubtitlesClient {
     private static final String XMLRPC_URL = "http://api.opensubtitles.org/xml-rpc";
 
@@ -74,9 +83,47 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
 
     }
 
+    @Override
+    public byte[] downloadFile(String url) throws IOException {
+        PipedOutputStream osPipe = new PipedOutputStream();
+        PipedInputStream isPipe = new PipedInputStream(osPipe);
+
+        WebClient client = WebClient.builder()
+                .baseUrl(url)
+                .build();
+        Flux<DataBuffer> dataBufferFlux = client.get().retrieve().bodyToFlux(DataBuffer.class);
+        DataBufferUtils.write(dataBufferFlux, osPipe).subscribe(DataBufferUtils.releaseConsumer());
+        return isPipe.readAllBytes();
+    }
+
 
     public Sub downloadSub(String imdb, String language) throws OpensubtitlesServiceException {
         return null;
     }
 
+
+    public String unzipSrtFile(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        ZipInputStream zis = new ZipInputStream(inputStream);
+        ZipEntry zipEntry = zis.getNextEntry();
+        while (zipEntry != null) {
+            log.info("file name in archive: {}", zipEntry.getName());
+            if(zipEntry.getName().matches("^.*\\.(srt|SRT)$")) {
+                log.info("file found: {}", zipEntry.getName());
+                ByteArrayOutputStream fos = new ByteArrayOutputStream();
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                return fos.toString();
+            }else{
+                zipEntry = zis.getNextEntry();
+            }
+        }
+        zis.closeEntry();
+        zis.close();
+        log.info("Not found SRT file in zip archive");
+        return null;
+    }
 }

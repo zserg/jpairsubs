@@ -43,15 +43,15 @@ public class OpensubtitlesClientTest {
         }
     }
 
-//    @Test
-//    public void searchSubtitlesByImdbTest(){
-//        OpensubtitlesClient client = new OpensubtitlesClientImpl();
-//        try {
-//            String token = client.login("TemporaryUserAgent").getToken().get();
-//            SearchSubtitlesResult result = client.searchSubtitlesByImdb(token, "1234", "en");
-//            assertEquals("gold is not all", result.getData().getMovieName());
-//        }catch (OpensubtitlesServiceException e){
-//            log.error("Error", e);
-//        }
-//    }
+    @Test
+    public void searchSubtitlesByImdbTest(){
+        OpensubtitlesClient client = new OpensubtitlesClientImpl();
+        try {
+            String token = client.login(userAgent).getToken().get();
+            SearchSubtitlesResult result = client.searchSubtitlesByImdb(token, "1234", "en");
+            assertEquals("gold is not all", result.getData());
+        }catch (OpensubtitlesServiceException e){
+            log.error("Error", e);
+        }
+    }
 }

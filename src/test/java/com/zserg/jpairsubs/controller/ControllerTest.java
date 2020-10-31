@@ -4,8 +4,10 @@ import com.zserg.jpairsubs.model.*;
 import com.zserg.jpairsubs.service.PairSubsService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.*;
 import org.springframework.boot.test.mock.mockito.*;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -17,11 +19,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@WebMvcTest
+@WebFluxTest
 public class ControllerTest {
 
     @Autowired
-    MockMvc mvc;
+    private WebTestClient webClient;
 
     @MockBean
     PairSubsService pairSubsService;
@@ -32,14 +34,16 @@ public class ControllerTest {
         MovieExt movie2 = new MovieExt("Nice movie 2", "IMDB002", 1997, List.of("ru", "en"));
         when(pairSubsService.getMoviesList()).thenReturn(List.of(movie1, movie2));
 
-        this.mvc.perform(get("/api/v1/movies"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(2)))
-                .andExpect(jsonPath("$.[0].title", is("Nice movie")))
-                .andExpect(jsonPath("$.[0].imdb", is("IMDB001")))
-                .andExpect(jsonPath("$.[0].year", is(1997)))
-                .andExpect(jsonPath("$.[0].languages.length()", is(3)))
-                .andExpect(jsonPath("$.[0].languages.[0]", is("ru")));
+        this.webClient.get().uri("/api/v1/movies")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.length()", is(2)).hasJsonPath()
+                .jsonPath("$.[0].title", is("Nice movie")).hasJsonPath()
+                .jsonPath("$.[0].imdb", is("IMDB001")).hasJsonPath()
+                .jsonPath("$.[0].year", is(1997)).hasJsonPath()
+                .jsonPath("$.[0].languages.length()", is(3)).hasJsonPath()
+                .jsonPath("$.[0].languages.[0]", is("ru")).hasJsonPath();
     }
 
     @Test
@@ -65,12 +69,14 @@ public class ControllerTest {
 
         when(pairSubsService.getPairSubs(1L, "ru", "en")).thenReturn(Optional.of(pairSubs));
 
-        this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,en"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.movie.title", is("Nice movie")))
-                .andExpect(jsonPath("$.movie.year", is(1997)))
-                .andExpect(jsonPath("$.subA.language", is("ru")))
-                .andExpect(jsonPath("$.subA.subs.[0].text", is("текст1")));
+        this.webClient.get().uri("/api/v1/pairsubs?movie=1&lang=ru,en")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.movie.title", is("Nice movie")).hasJsonPath()
+                .jsonPath("$.movie.year", is(1997)).hasJsonPath()
+                .jsonPath("$.subA.language", is("ru")).hasJsonPath()
+                .jsonPath("$.subA.subs.[0].text", is("текст1")).hasJsonPath();
     }
 
     @Test
@@ -78,8 +84,9 @@ public class ControllerTest {
 
         when(pairSubsService.getPairSubs(1L, "ru", "it")).thenReturn(Optional.empty());
 
-        this.mvc.perform(get("/api/v1/pairsubs?movie=1&lang=ru,it"))
-                .andExpect(status().isNotFound());
+        this.webClient.get().uri("/api/v1/pairsubs?movie=1&lang=ru,it")
+                .exchange()
+                .expectStatus().isNotFound();
 
     }
 
