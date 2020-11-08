@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,6 +84,15 @@ class PairSubsServiceImplTest {
         assertEquals("text1", result.getSubB().getSubs().get(0).getText());
 
 
+    }
+
+    @Test
+    void parseSrtTest() throws Exception {
+        String path = "src/test/resources/test.srt";
+        List<String> allLines = Files.readAllLines(Paths.get(path));
+        List<Subtitle> subtitleList = pairSubsService.parseSrt(allLines);
+        assertEquals(5, subtitleList.size());
+        assertEquals("Advertise your product or brand here\ncontact www.OpenSubtitles.org today", subtitleList.get(0).getText());
     }
 
 
