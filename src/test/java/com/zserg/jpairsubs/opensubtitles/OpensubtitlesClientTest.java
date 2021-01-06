@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
@@ -49,7 +51,7 @@ public class OpensubtitlesClientTest {
         try {
             String token = client.login(userAgent).getToken().get();
             SearchSubtitlesResult result = client.searchSubtitlesByImdb(token, "1234", "en");
-            assertEquals("gold is not all", result.getData());
+            assertEquals("Gold Is Not All", ((Map) result.getData()[0]).get("MovieName"));
         }catch (OpensubtitlesServiceException e){
             log.error("Error", e);
         }

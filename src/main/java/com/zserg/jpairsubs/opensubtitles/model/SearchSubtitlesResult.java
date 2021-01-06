@@ -9,14 +9,14 @@ import java.util.Map;
 public class SearchSubtitlesResult {
     private List<Object> subtitles;
     private String status;
-    private String data;
+    private Object[] data;
 
     public SearchSubtitlesResult(Map<String, Object> map){
         if (map.containsKey("status")) {
             this.status = (String) map.get("status");
         }
         if (map.containsKey("data")) {
-            this.data = (String) map.get("data");
+            this.data = (Object[]) map.get("data");
         }
 
     }
