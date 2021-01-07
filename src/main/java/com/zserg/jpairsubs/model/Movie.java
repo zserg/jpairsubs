@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@ToString
 public class Movie {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -19,7 +20,7 @@ public class Movie {
     private String imdb;
     private int year;
 
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
     private List<Sub> subList;
 
     public Movie(String title, String imdb, int year) {

@@ -84,9 +84,10 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
             searchParams.put("imdbid", imdb);
 
             Object[] params = new Object[]{token, new Object[]{searchParams}};
+            log.info("params: {}", params);
             Map<String, Object> result = (Map<String, Object>) client.execute("SearchSubtitles", params);
             SearchSubtitlesResult info = new SearchSubtitlesResult(result);
-            if (info.getStatus().contains("200 OK")) {
+            if (info.getStatus().contains("200 OK") && info.getZipUrl() != null) {
                 return Optional.of(info);
             } else {
                 return Optional.empty();

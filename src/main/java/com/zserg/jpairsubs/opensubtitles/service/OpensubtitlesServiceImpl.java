@@ -8,11 +8,13 @@ import com.zserg.jpairsubs.opensubtitles.client.OpensubtitlesClient;
 import com.zserg.jpairsubs.opensubtitles.model.SearchSubtitlesResult;
 import com.zserg.jpairsubs.service.PairSubsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Service
 public class OpensubtitlesServiceImpl implements OpensubtitlesService {
     private static final String XMLRPC_URL = "https://api.opensubtitles.org/xml-rpc";
 
@@ -35,6 +37,23 @@ public class OpensubtitlesServiceImpl implements OpensubtitlesService {
                     return movie;
                 });
     }
+
+    @Override
+    public Optional<Movie> searchMovie(String imdb, String lang1, String lang2) {
+        return client.searchSubtitlesByImdb(imdb, lang1)
+                .map(result -> {
+                    Movie movie = new Movie();
+                    movie.setImdb(imdb);
+                    movie.setTitle(result.getMovieName());
+                    movie.setYear(result.getYear());
+                    log.info("movie: {}", movie);
+                    return movie;
+                })
+                .map(movie -> {
+                    return client.searchSubtitlesByImdb(imdb, lang2).isPresent() ? movie : null;
+                });
+    }
+
 
     @Override
     public Optional<Sub> downloadSub(String imdb, String language) {

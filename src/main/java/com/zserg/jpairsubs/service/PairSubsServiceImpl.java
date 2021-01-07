@@ -49,9 +49,7 @@ public class PairSubsServiceImpl implements PairSubsService {
     @Override
     public List<MovieExt> getMoviesList() {
         return movieRepository.findAll().stream()
-                .peek(System.out::println)
                 .map(MovieExt::new)
-                .peek(System.out::println)
                 .collect(Collectors.toList());
     }
 
@@ -102,5 +100,21 @@ public class PairSubsServiceImpl implements PairSubsService {
         }
         return subtitleList;
 
+    }
+
+    @Override
+    public void storePairSubs(Movie movie, Sub sub1, Sub sub2) {
+        Movie save = movieRepository.save(movie);
+        Sub save1 = pairSubRepository.save(sub1);
+        Sub save2 = pairSubRepository.save(sub2);
+    }
+
+    @Override
+    public void storePairSubs(PairSub pairSub) {
+        pairSub.getSubA().setMovie(pairSub.getMovie());
+        pairSub.getSubB().setMovie(pairSub.getMovie());
+        Movie save = movieRepository.save(pairSub.getMovie());
+        Sub save1 = pairSubRepository.save(pairSub.getSubA());
+        Sub save2 = pairSubRepository.save(pairSub.getSubB());
     }
 }

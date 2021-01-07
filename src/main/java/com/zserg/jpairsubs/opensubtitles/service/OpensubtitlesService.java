@@ -8,5 +8,8 @@ import java.util.Optional;
 
 public interface OpensubtitlesService {
     Optional<Movie> searchMovie(String imdb, String language) throws OpensubtitlesServiceException;
-    Optional<Sub> downloadSub(String imdb, String language) throws OpensubtitlesServiceException;
+
+    Optional<Movie> searchMovie(String imdb, String lang1, String lang2);
+
+    Optional<Sub> downloadSub(String imdb, String language);
 }
