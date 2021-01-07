@@ -1,5 +1,6 @@
 package com.zserg.jpairsubs.opensubtitles.service;
 
+import com.zserg.jpairsubs.model.Movie;
 import com.zserg.jpairsubs.model.Sub;
 import com.zserg.jpairsubs.opensubtitles.OpensubtitlesServiceException;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,18 @@ class OpensubtitlesServiceImplTest {
 
     @Autowired
     private OpensubtitlesService opensubtitlesService;
+
+    @Test
+    void searchMovieTest() throws OpensubtitlesServiceException {
+        Movie movie = opensubtitlesService.searchMovie("1234", "en").get();
+        assertEquals("Gold Is Not All", movie.getTitle());
+    }
+
+    @Test
+    void searchMovieNotFoundTest() throws OpensubtitlesServiceException {
+        assertTrue(!opensubtitlesService.searchMovie("xxx", "en").isPresent());
+    }
+
 
     @Test
     void downloadSubTest() throws OpensubtitlesServiceException {
