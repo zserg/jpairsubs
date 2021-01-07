@@ -24,4 +24,9 @@ public class Sub {
 
     @Convert(converter = SubConverter.class)
     private List<Subtitle> subs;
+
+    public Sub(String imdb, String language, List<Subtitle> subs) {
+        this.language = language;
+        this.subs = subs;
+    }
 }

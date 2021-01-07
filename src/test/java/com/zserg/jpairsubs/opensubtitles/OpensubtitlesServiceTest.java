@@ -1,5 +1,7 @@
 package com.zserg.jpairsubs.opensubtitles;
 
+import com.zserg.jpairsubs.opensubtitles.client.OpensubtitlesClient;
+import com.zserg.jpairsubs.opensubtitles.client.OpensubtitlesClientImpl;
 import com.zserg.jpairsubs.opensubtitles.model.OsServerInfo;
 import com.zserg.jpairsubs.opensubtitles.service.OpensubtitlesService;
 import com.zserg.jpairsubs.opensubtitles.service.OpensubtitlesServiceImpl;
@@ -15,9 +17,11 @@ public class OpensubtitlesServiceTest {
 //        assertEquals("http://www.opensubtitles.org", osServerInfo.getUrl());
 //    }
 
+/*
     @Test
     public void serverInfoTest(){
-        OpensubtitlesService service = new OpensubtitlesServiceImpl();
+        OpensubtitlesClientImpl client = new OpensubtitlesClientImpl();
+        OpensubtitlesService service = new OpensubtitlesServiceImpl(client);
         try {
             OsServerInfo osServerInfo = service.getServerInfo();
             assertEquals("http://api.opensubtitles.org/xml-rpc", osServerInfo.getXmlrpcUrl());
@@ -25,4 +29,5 @@ public class OpensubtitlesServiceTest {
             log.error("Error", e);
         }
     }
+*/
 }

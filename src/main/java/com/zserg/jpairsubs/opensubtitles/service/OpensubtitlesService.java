@@ -1,10 +1,12 @@
 package com.zserg.jpairsubs.opensubtitles.service;
 
+import com.zserg.jpairsubs.model.Movie;
 import com.zserg.jpairsubs.model.Sub;
 import com.zserg.jpairsubs.opensubtitles.OpensubtitlesServiceException;
-import com.zserg.jpairsubs.opensubtitles.model.OsServerInfo;
+
+import java.util.Optional;
 
 public interface OpensubtitlesService {
-    public OsServerInfo getServerInfo() throws OpensubtitlesServiceException;
-    public Sub downloadSub(String imdb, String language) throws OpensubtitlesServiceException;
+    Optional<Movie> searchMovie(String imdb, String language) throws OpensubtitlesServiceException;
+    Optional<Sub> downloadSub(String imdb, String language) throws OpensubtitlesServiceException;
 }

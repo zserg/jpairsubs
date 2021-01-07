@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -52,6 +53,12 @@ public class PairSubsServiceImpl implements PairSubsService {
                 .map(MovieExt::new)
                 .peek(System.out::println)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Subtitle> parseSrt(String srtAsOneString) throws Exception {
+        List<String> srt = Arrays.asList(srtAsOneString.split("\\r?\\n"));
+        return parseSrt(srt);
     }
 
     @Override

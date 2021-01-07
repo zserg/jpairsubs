@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +25,7 @@ public class OpensubtitlesClientTest {
 
     @Test
     public void serverInfoTest(){
-        OpensubtitlesClient client = new OpensubtitlesClientImpl();
+        OpensubtitlesClient client = new OpensubtitlesClientImpl(userAgent);
         try {
             OsServerInfo osServerInfo = client.getServerInfo();
             log.info("{}", osServerInfo);
@@ -36,7 +37,7 @@ public class OpensubtitlesClientTest {
 
     @Test
     public void loginTest(){
-        OpensubtitlesClient client = new OpensubtitlesClientImpl();
+        OpensubtitlesClient client = new OpensubtitlesClientImpl(userAgent);
         try {
             LoginResult token = client.login(userAgent);
             assertEquals(true, token.getToken().get().length() > 0);
@@ -47,13 +48,23 @@ public class OpensubtitlesClientTest {
 
     @Test
     public void searchSubtitlesByImdbTest(){
-        OpensubtitlesClient client = new OpensubtitlesClientImpl();
+        OpensubtitlesClient client = new OpensubtitlesClientImpl(userAgent);
+        SearchSubtitlesResult result = client.searchSubtitlesByImdb("1234", "en").get();
+        assertEquals("Gold Is Not All", result.getMovieName());
+    }
+
+    @Test
+    public void downloadSubtitlesByImdbTest(){
+        OpensubtitlesClient client = new OpensubtitlesClientImpl(userAgent);
+        String srtFile = null;
         try {
-            String token = client.login(userAgent).getToken().get();
-            SearchSubtitlesResult result = client.searchSubtitlesByImdb(token, "1234", "en");
-            assertEquals("Gold Is Not All", ((Map) result.getData()[0]).get("MovieName"));
-        }catch (OpensubtitlesServiceException e){
+            SearchSubtitlesResult result = client.searchSubtitlesByImdb("1234", "en").get();
+            String link = result.getZipUrl();
+            InputStream is = client.downloadFile(link);
+            srtFile = client.unzipSrtFile(is);
+        }catch (IOException e){
             log.error("Error", e);
         }
+        assertTrue(srtFile.contains("that's the only demon"));
     }
 }

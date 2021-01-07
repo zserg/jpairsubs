@@ -6,10 +6,15 @@ import com.zserg.jpairsubs.opensubtitles.model.OsServerInfo;
 import com.zserg.jpairsubs.opensubtitles.model.SearchSubtitlesResult;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Optional;
 
 public interface OpensubtitlesClient {
-    public OsServerInfo getServerInfo() throws OpensubtitlesServiceException;
-    public LoginResult login(String userAgent) throws OpensubtitlesServiceException;
-    public SearchSubtitlesResult searchSubtitlesByImdb(String token, String imdb, String language) throws OpensubtitlesServiceException;
-    public byte[] downloadFile(String url) throws IOException;
+    OsServerInfo getServerInfo() throws OpensubtitlesServiceException;
+    LoginResult login(String userAgent) throws OpensubtitlesServiceException;
+    Optional<SearchSubtitlesResult> searchSubtitlesByImdb(String imdb, String language);
+    InputStream downloadFile(String url) throws IOException;
+    String unzipSrtFile(InputStream inputStream) throws IOException;
+    Optional<String> downloadSubtitle(String imdb, String language);
+
 }
