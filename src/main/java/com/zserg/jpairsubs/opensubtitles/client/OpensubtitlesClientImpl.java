@@ -5,6 +5,7 @@ import com.zserg.jpairsubs.opensubtitles.OpensubtitlesServiceException;
 import com.zserg.jpairsubs.opensubtitles.model.LoginResult;
 import com.zserg.jpairsubs.opensubtitles.model.OsServerInfo;
 import com.zserg.jpairsubs.opensubtitles.model.SearchSubtitlesResult;
+import com.zserg.jpairsubs.utils.TextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -73,6 +74,7 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
 
     public Optional<SearchSubtitlesResult> searchSubtitlesByImdb(String imdb, String language) {
         try {
+            log.info("search subtitles: {}, lang={}", imdb, language);
             String token = login(userAgent).getToken().get();
             XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
             config.setServerURL(new URL(XMLRPC_URL));
@@ -84,7 +86,7 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
             searchParams.put("imdbid", imdb);
 
             Object[] params = new Object[]{token, new Object[]{searchParams}};
-            log.info("params: {}", params);
+            log.info("params: {}, searchParams: {}", params, searchParams);
             Map<String, Object> result = (Map<String, Object>) client.execute("SearchSubtitles", params);
             SearchSubtitlesResult info = new SearchSubtitlesResult(result);
             if (info.getStatus().contains("200 OK") && info.getZipUrl() != null) {
@@ -130,7 +132,9 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
                     fos.write(buffer, 0, len);
                 }
                 fos.close();
-                return fos.toString();
+                byte[] bytes = fos.toByteArray();
+                String charsetName = TextUtils.detectCharset(bytes);
+                return new String(bytes, charsetName);
             } else {
                 zipEntry = zis.getNextEntry();
             }
@@ -147,6 +151,7 @@ public class OpensubtitlesClientImpl implements OpensubtitlesClient {
         return client.searchSubtitlesByImdb(imdb, language)
                 .map(result -> {
                     String link = result.getZipUrl();
+                    log.info("download link: {}", link);
                     InputStream is;
                     try {
                         is = client.downloadFile(link);

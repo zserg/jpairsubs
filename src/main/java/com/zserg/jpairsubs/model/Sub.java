@@ -27,7 +27,7 @@ public class Sub {
 
     @Convert(converter = SubConverter.class)
     @Lob
-    @Column(columnDefinition="CLOB")
+    @Column(columnDefinition="LONGTEXT")
     private List<Subtitle> subs;
 
     public Sub(String imdb, String language, List<Subtitle> subs) {

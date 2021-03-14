@@ -12,6 +12,8 @@ public interface PairSubsService {
 
     List<MovieExt> getMoviesList();
 
+    void deleteMovie(Long id);
+
     List<Subtitle> parseSrt(String srtAsOneString) throws Exception;
 
     List<Subtitle> parseSrt(List<String> srt) throws Exception;

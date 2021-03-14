@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class MovieExt {
+    private Long id;
     private String title;
     private String imdb;
     private int year;
     private List<String> languages;
 
     public MovieExt(Movie movie) {
+        this.id = movie.getId();
         this.title = movie.getTitle();
         this.imdb = movie.getImdb();
         this.year = movie.getYear();

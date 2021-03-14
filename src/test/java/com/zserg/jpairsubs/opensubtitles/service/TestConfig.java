@@ -12,8 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(lazyInit = true)
 public class TestConfig {
 
-    @Bean
-    OpensubtitlesService getOpensubtitlesService(OpensubtitlesClient client, PairSubsService pairSubsService){
-        return new OpensubtitlesServiceImpl(client, pairSubsService);
-    }
+//    @Bean
+//    OpensubtitlesService getOpensubtitlesService(OpensubtitlesClient client, PairSubsService pairSubsService){
+//        return new OpensubtitlesServiceImpl(client, pairSubsService);
+//    }
 }

@@ -30,8 +30,8 @@ public class ControllerTest {
 
     @Test
     void getMoviesList() throws Exception {
-        MovieExt movie1 = new MovieExt("Nice movie", "IMDB001", 1997, List.of("ru", "en", "fr"));
-        MovieExt movie2 = new MovieExt("Nice movie 2", "IMDB002", 1997, List.of("ru", "en"));
+        MovieExt movie1 = new MovieExt(1L, "Nice movie", "IMDB001", 1997, List.of("ru", "en", "fr"));
+        MovieExt movie2 = new MovieExt(2L, "Nice movie 2", "IMDB002", 1997, List.of("ru", "en"));
         when(pairSubsService.getMoviesList()).thenReturn(List.of(movie1, movie2));
 
         this.webClient.get().uri("/api/v1/movies")

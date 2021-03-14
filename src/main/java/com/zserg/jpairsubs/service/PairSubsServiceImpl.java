@@ -4,6 +4,7 @@ import com.zserg.jpairsubs.data.MovieRepository;
 import com.zserg.jpairsubs.data.SubRepository;
 import com.zserg.jpairsubs.model.*;
 import com.zserg.jpairsubs.utils.SRTUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class PairSubsServiceImpl implements PairSubsService {
     private static final Pattern PATTERN_TIME = Pattern.compile("([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3}).*([\\d]{2}:[\\d]{2}:[\\d]{2},[\\d]{3})");
@@ -49,8 +51,14 @@ public class PairSubsServiceImpl implements PairSubsService {
     @Override
     public List<MovieExt> getMoviesList() {
         return movieRepository.findAll().stream()
+                .peek(m -> log.info("movie: {}", m))
                 .map(MovieExt::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteMovie(Long id) {
+        movieRepository.deleteById(id);
     }
 
     @Override
